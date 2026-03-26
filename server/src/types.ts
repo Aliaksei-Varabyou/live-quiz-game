@@ -4,7 +4,6 @@ export interface Player {
   name: string;
   index: string;
   score: number;
-  ws?: WebSocket;
   hasAnswered?: boolean;
   answerTime?: number;
   answeredCorrectly?: boolean;
@@ -22,7 +21,7 @@ export interface Game {
   code: string;
   hostId: string;
   questions: Question[];
-  players: Player[];
+  players: string[];
   currentQuestion: number;
   status: 'waiting' | 'in_progress' | 'finished';
   questionStartTime?: number;

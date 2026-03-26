@@ -1,19 +1,23 @@
 import { WebSocket } from 'ws';
 
-export const store = new Map<WebSocket, string | null>;
+const connectionStore = new Map<WebSocket, string | null>;
 
 export function addConnection(ws: WebSocket): void {
-  store.set(ws, null);
+  connectionStore.set(ws, null);
 }
 
 export function removeConnection(ws: WebSocket): void {
-    store.delete(ws);
+    connectionStore.delete(ws);
 }
 
 export function getPlayerId(ws: WebSocket): string | null | undefined {
-  return store.get(ws);
+  return connectionStore.get(ws);
 }
 
 export function setPlayerId(ws: WebSocket, playerId: string): void {
-  store.set(ws, playerId);
+  connectionStore.set(ws, playerId);
+}
+
+export function getAllConnections(): (string | null)[] {
+  return Array.from(connectionStore.values());
 }

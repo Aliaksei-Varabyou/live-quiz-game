@@ -3,7 +3,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { sendResponse } from './utils/send';
 import { WSMessage } from './types';
 import { handleMessage } from './handlers';
-import { addConnection, removeConnection, store } from './store/connection.store';
+import { addConnection, removeConnection } from './store/connection.store';
 
 dotenv.config({debug: false});
 
