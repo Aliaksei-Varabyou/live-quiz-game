@@ -6,13 +6,15 @@ import { Player, RegData, User } from "../types";
 import { generateId } from "../utils/id";
 import { sendError, sendSuccess } from '../utils/send';
 
+const TYPE = 'req';
+
 export function handleReg(ws: WebSocket, data: RegData): void {
   console.log('reg called');
   if (data.name && data.password) {
     let user: User | undefined = getUser(data.name);
     if (user) { //login
       if (user.password !== data.password) {
-        sendError(ws, 'req', 'Incorrect password');
+        sendError(ws, TYPE, 'Incorrect password');
         return;
       }
     } else { //register
@@ -31,13 +33,13 @@ export function handleReg(ws: WebSocket, data: RegData): void {
     }
     addPlayer(player);
     setPlayerId(ws, player.index);
-    sendSuccess(ws, 'reg', {
+    sendSuccess(ws, TYPE, {
       name: user.name,
       index: player.index,
       error: false,
       errorText: ''
     })
   } else {
-    sendError(ws, 'req', 'Error response');
+    sendError(ws, TYPE, 'Error response');
   }
 }

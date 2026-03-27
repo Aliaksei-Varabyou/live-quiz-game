@@ -12,6 +12,10 @@ export function getGame(id: string): Game | undefined {
   return gameStore.get(id);
 }
 
+export function getAllGames(): Game[] {
+  return Array.from(gameStore.values());
+}
+
 export function addPlayerToGame(gameId: string, playerId: string): void {
   const game = getGame(gameId);
   const player = getPlayer(playerId);
