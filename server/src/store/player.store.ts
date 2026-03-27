@@ -1,4 +1,3 @@
-import { WebSocket } from 'ws';
 import { Player } from "../types";
 
 const playerStore = new Map<string, Player>;
