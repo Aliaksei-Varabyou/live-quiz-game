@@ -54,7 +54,7 @@ export function handleCreateGame(ws: WebSocket, data: CreateGameData): void {
     setPlayerGame(playerId, game.id);
     sendSuccess(ws, RESPONSE_TYPE, {
       code: game.code,
-      game_id: game.id
+      gameId: game.id
     })
   } else {
     if (!checkQuestions) sendError(ws, REQUEST_TYPE, 'Create game invalid questions');

@@ -21,3 +21,11 @@ export function setPlayerId(ws: WebSocket, playerId: string): void {
 export function getAllConnections(): (string | null)[] {
   return Array.from(connectionStore.values());
 }
+
+export function getAllConnectionsForGame(playerIds: string[]): WebSocket[] {
+  const playerIdSet = new Set(playerIds);
+
+  return [...connectionStore.entries()]
+    .filter(([_, playerId]) => playerId !== null && playerIdSet.has(playerId))
+    .map(([ws]) => ws);
+}
