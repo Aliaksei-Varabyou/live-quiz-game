@@ -5,24 +5,23 @@ import { getPlayerId } from '../store/connection.store';
 import { sendError, sendSuccess } from '../utils/send';
 import { finishQuestion } from '../services/game.service';
 
-const REQUEST_TYPE = 'answer';
 const RESPONSE_TYPE = 'answer_accepted';
 
 function checks(ws: WebSocket, game: Game, playerId: string, questionIndex: number): boolean {
   if (!game.players.includes(playerId)) {
-    sendError(ws, REQUEST_TYPE, 'Player not in game');
+    sendError(ws, 'Player not in game');
     return false;
   }
   if (game.status !== 'in_progress') {
-    sendError(ws, REQUEST_TYPE, 'Game not in progress');
+    sendError(ws, 'Game not in progress');
     return false;
   }
   if (game.currentQuestion !== questionIndex) {
-    sendError(ws, REQUEST_TYPE, 'Invalid question index');
+    sendError(ws, 'Invalid question index');
     return false;
   }
   if (game.playerAnswers.has(playerId)) {
-    sendError(ws, REQUEST_TYPE, 'Player already answered');
+    sendError(ws, 'Player already answered');
     return false;
   }
   return true;
@@ -49,7 +48,7 @@ export function handleAnswer(ws: WebSocket, data: AnswerData): void {
       finishQuestion(game);
     }
   } else {
-    if (!game) sendError(ws, REQUEST_TYPE, 'Game not found');
-    else if (!playerId) sendError(ws, REQUEST_TYPE, 'Unauthorized');
+    if (!game) sendError(ws, 'Game not found');
+    else if (!playerId) sendError(ws, 'Unauthorized');
   }
 }

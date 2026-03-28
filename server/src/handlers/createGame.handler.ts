@@ -6,7 +6,6 @@ import { createGame, getAllGames, setPlayerGame } from '../store/game.store';
 import { getPlayerId } from '../store/connection.store';
 
 const RESPONSE_TYPE = 'game_created';
-const REQUEST_TYPE = 'create_game';
 
 function isQuestionsArray(arr: unknown): arr is Question[] {
   return Array.isArray(arr) && arr.every(item => 
@@ -57,8 +56,8 @@ export function handleCreateGame(ws: WebSocket, data: CreateGameData): void {
       gameId: game.id
     })
   } else {
-    if (!checkQuestions) sendError(ws, REQUEST_TYPE, 'Create game invalid questions');
-    else if (!playerId) sendError(ws, REQUEST_TYPE, 'Unauthorized');
+    if (!checkQuestions) sendError(ws, 'Create game invalid questions');
+    else if (!playerId) sendError(ws, 'Unauthorized');
   }
 
 }

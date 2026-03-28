@@ -14,7 +14,7 @@ export function handleReg(ws: WebSocket, data: RegData): void {
     let user: User | undefined = getUser(data.name);
     if (user) { //login
       if (user.password !== data.password) {
-        sendError(ws, TYPE, 'Incorrect password');
+        sendError(ws, 'Incorrect password');
         return;
       }
     } else { //register
@@ -40,6 +40,6 @@ export function handleReg(ws: WebSocket, data: RegData): void {
       errorText: ''
     })
   } else {
-    sendError(ws, TYPE, 'Error response');
+    sendError(ws, 'Error response');
   }
 }

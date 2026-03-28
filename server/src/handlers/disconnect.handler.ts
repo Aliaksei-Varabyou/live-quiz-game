@@ -29,10 +29,9 @@ export function handleDisconnect(ws: WebSocket): void {
     return;
   }
 
-  // если хост → завершаем игру
+  // if it is host
   if (game.hostId === playerId) {
-    game.players = game.players.filter(id => id !== playerId);
-    removePlayerGame(playerId);
+    removePlayerFromGame(playerId, game);
     removeConnection(ws);
 
     finishGame(game);
@@ -40,10 +39,8 @@ export function handleDisconnect(ws: WebSocket): void {
   }
 
   // if usual player (not host)
-  game.players = game.players.filter(id => id !== playerId);
   game.playerAnswers.delete(playerId);
-
-  removePlayerGame(playerId);
+  removePlayerFromGame(playerId, game);
   removeConnection(ws);
 
   // if nobody stayed
