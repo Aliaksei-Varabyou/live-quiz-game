@@ -12,6 +12,10 @@ export function getGame(id: string): Game | undefined {
   return gameStore.get(id);
 }
 
+export function deleteGame(id: string): void {
+  gameStore.delete(id);
+}
+
 export function getGameByCode(code: string): Game | undefined {
   return Array.from(gameStore.values()).find(g => g.code === code);
 }

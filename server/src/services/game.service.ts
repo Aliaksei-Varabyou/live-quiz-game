@@ -69,7 +69,7 @@ export function finishQuestion(game: Game): void {
   }
 }
 
-function finishGame(game: Game): void {
+export function finishGame(game: Game): void {
   game.status = 'finished';
   const ranks: Player[] = [];
   game.players.forEach(playerId => {

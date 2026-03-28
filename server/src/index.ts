@@ -3,7 +3,8 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { sendResponse } from './utils/send';
 import { WSMessage } from './types';
 import { handleMessage } from './handlers';
-import { addConnection, removeConnection } from './store/connection.store';
+import { addConnection } from './store/connection.store';
+import { handleDisconnect } from './handlers/disconnect.handler';
 
 dotenv.config({debug: false});
 
@@ -35,6 +36,6 @@ wss.on('connection', function connection(ws: WebSocket) {
 
   ws.on('close', function close() {
     console.log('client disconnect');
-    removeConnection(ws);
+    handleDisconnect(ws);
   });
 });
