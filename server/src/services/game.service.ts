@@ -1,5 +1,5 @@
 import { getPlayer } from "../store/player.store";
-import { Game, Question } from "../types";
+import { Game, Player, Question } from "../types";
 import { broadcastToSuccess } from "../utils/broadcast";
 
 const RESPONSE_TYPE = 'question';
@@ -8,7 +8,7 @@ const BASE_POINTS = 1000;
 export function sendQuestion(game: Game): void {
   const currentQuestion: Question = game.questions[game.currentQuestion];
   game.questionStartTime = Date.now();
-  game.playerAnswers = new Map();
+  game.playerAnswers.clear();
   game.questionTimer = setTimeout(() => {
     finishQuestion(game);
   }, currentQuestion.timeLimitSec * 1000 );
@@ -23,6 +23,7 @@ export function sendQuestion(game: Game): void {
 }
 
 export function finishQuestion(game: Game): void {
+  if (!game.questionTimer) return;
   if (game.questionTimer) {
     clearTimeout(game.questionTimer);
     game.questionTimer = undefined;
@@ -46,7 +47,7 @@ export function finishQuestion(game: Game): void {
       player.score += points;
       playerResults.push({
         "name": player.name,
-        "answered": Boolean(answer),
+        "answered": !!answer,
         "correct": correct,
         "pointsEarned": points,
         "totalScore": player.score
@@ -60,10 +61,34 @@ export function finishQuestion(game: Game): void {
     playerResults
   });
 
-  if (game.questions.length - 1 < game.currentQuestion) {
+  if (game.currentQuestion + 1 < game.questions.length) {
     game.currentQuestion++;
     sendQuestion(game);
   } else {
-    // ToDo: finish game
+    finishGame(game);
   }
+}
+
+function finishGame(game: Game): void {
+  game.status = 'finished';
+  const ranks: Player[] = [];
+  game.players.forEach(playerId => {
+    const player = getPlayer(playerId);
+    if (player) {
+      ranks.push(player);
+    }
+  });
+  ranks.sort((a, b) => b.score - a.score);
+  const scoreboard: { name: string; score: number; rank: number; }[] = [];
+  ranks.forEach((p, index) => {
+    scoreboard.push({
+      name: p.name,
+      score: p.score,
+      rank: index + 1
+    })
+  })
+
+  broadcastToSuccess(game.id, 'game_finished', {
+    scoreboard
+  });
 }
