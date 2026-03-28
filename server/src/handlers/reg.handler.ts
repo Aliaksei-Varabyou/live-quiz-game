@@ -6,7 +6,7 @@ import { Player, RegData, User } from "../types";
 import { generateId } from "../utils/id";
 import { sendError, sendSuccess } from '../utils/send';
 
-const TYPE = 'req';
+const TYPE = 'reg';
 
 export function handleReg(ws: WebSocket, data: RegData): void {
   console.log('reg called');
