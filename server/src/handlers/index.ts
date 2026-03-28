@@ -4,6 +4,7 @@ import { handleReg } from './reg.handler';
 import { handleCreateGame } from './createGame.handler';
 import { handleJoinGame } from './joinGame.handler';
 import { handleStartGame } from './startGame.handle';
+import { handleAnswer } from './answer.handler';
 
 export function handleMessage(ws: WebSocket, message: WSMessage) {
   switch (message?.type) {
@@ -18,6 +19,9 @@ export function handleMessage(ws: WebSocket, message: WSMessage) {
       break;
     case 'start_game':
       handleStartGame(ws, message.data);
+      break;
+    case 'answer':
+      handleAnswer(ws, message.data);
       break;
     default:
       console.log('unknown message type');

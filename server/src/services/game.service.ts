@@ -8,9 +8,9 @@ export function sendQuestion(game: Game): void {
   game.questionStartTime = Date.now();
   game.playerAnswers = new Map();
   game.questionTimer = setTimeout(() => {
-    //ToDO: finish question
+    finishQuestion(game);
   }, current.timeLimitSec * 1000 );
-  
+
   broadcastToSuccess(game.id, RESPONSE_TYPE, {
       questionNumber: game.currentQuestion + 1,
       totalQuestions: game.questions.length,
@@ -18,4 +18,12 @@ export function sendQuestion(game: Game): void {
       options: current.options,
       timeLimitSec: current.timeLimitSec
     })
+}
+
+export function finishQuestion(game: Game): void {
+  if (game.questionTimer) {
+    clearTimeout(game.questionTimer);
+    game.questionTimer = undefined;
+  }
+  // ToDo: actions after everybody answered
 }
