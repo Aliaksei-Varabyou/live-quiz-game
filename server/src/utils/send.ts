@@ -7,9 +7,9 @@ export const sendResponse = (ws: WebSocket, response: WSMessage): void => {
   }
 };
 
-export const sendError = (ws: WebSocket, message: string): void => {
+export const sendError = (ws: WebSocket, type: string, message: string): void => {
   sendResponse(ws, {
-    type: 'error',
+    type: type,
     data: {
       error: true,
       errorText: message

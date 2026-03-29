@@ -7,7 +7,7 @@ export function broadcastToGame(gameId: string, message: WSMessage): void {
   const game = getGame(gameId);
   if (!game) return;
 
-  const connections = getAllConnectionsForGame(game.players);
+  const connections = getAllConnectionsForGame([...game.players, game.hostId]);
   connections.forEach(ws => {
     if (ws.readyState === ws.OPEN) {
       sendResponse(ws, message);

@@ -7,20 +7,21 @@ import { getPlayer } from '../store/player.store';
 import { broadcastToSuccess } from '../utils/broadcast';
 
 const RESPONSE_TYPE = 'game_joined';
+const REQUEST_TYPE = 'join_game';
 const BROADCAST_TYPE = 'player_joined';
 const BROADCAST_TYPE2 = 'update_players';
 
 function gameChecks(ws: WebSocket, game: Game | undefined, playerId: string): boolean {
   if (!game) {
-    sendError(ws, 'Game not found');
+    sendError(ws, REQUEST_TYPE, 'Game not found');
     return false;
   }
   if (game.status !== 'waiting') {
-    sendError(ws, 'Game already started');
+    sendError(ws, REQUEST_TYPE, 'Game already started');
     return false;
   }
   if (game.players.includes(playerId)) {
-    sendError(ws, 'Player already joined');
+    sendError(ws, REQUEST_TYPE, 'Player already joined');
     return false;
   }
   return true;
@@ -61,7 +62,7 @@ export function handleJoinGame(ws: WebSocket, data: JoinGameData): void {
       broadcastToSuccess(game.id, BROADCAST_TYPE2, playersData);
     }
   } else {
-    if (!code) sendError(ws, 'Join game invalid code');
-    else if (!playerId) sendError(ws, 'Unauthorized');
+    if (!code) sendError(ws, REQUEST_TYPE, 'Join game invalid code');
+    else if (!playerId) sendError(ws, REQUEST_TYPE, 'Unauthorized');
   }
 }

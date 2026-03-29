@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws';
 import { setPlayerId } from "../store/connection.store";
 import { addPlayer } from "../store/player.store";
-import { addUser, getUser } from "../store/user.store";
+import { addUser, getUserByName } from "../store/user.store";
 import { Player, RegData, User } from "../types";
 import { generateId } from "../utils/id";
 import { sendError, sendSuccess } from '../utils/send';
@@ -11,10 +11,10 @@ const TYPE = 'reg';
 export function handleReg(ws: WebSocket, data: RegData): void {
   console.log('reg called');
   if (data.name && data.password) {
-    let user: User | undefined = getUser(data.name);
+    let user: User | undefined = getUserByName(data.name);
     if (user) { //login
       if (user.password !== data.password) {
-        sendError(ws, 'Incorrect password');
+        sendError(ws, TYPE, 'Incorrect password');
         return;
       }
     } else { //register
@@ -40,6 +40,6 @@ export function handleReg(ws: WebSocket, data: RegData): void {
       errorText: ''
     })
   } else {
-    sendError(ws, 'Error response');
+    sendError(ws, TYPE, 'Error response');
   }
 }

@@ -5,13 +5,15 @@ import { getGame } from '../store/game.store';
 import { getPlayerId } from '../store/connection.store';
 import { sendQuestion } from '../services/game.service';
 
+const REQUEST_TYPE = 'start_game';
+
 function checks(ws: WebSocket, game: Game, playerId: string): boolean {
   if (game.hostId !== playerId) {
-    sendError(ws, 'Only host can start game');
+    sendError(ws, REQUEST_TYPE, 'Only host can start game');
     return false;
   }
   if (game.status !== 'waiting') {
-    sendError(ws, 'Game already started');
+    sendError(ws, REQUEST_TYPE, 'Game already started');
     return false;
   }
   return true;
@@ -29,8 +31,8 @@ export function handleStartGame(ws: WebSocket, data: StartGameData): void {
     sendQuestion(game);
     
   } else {
-    if (!game) sendError(ws, 'Game not found');
-    else if (!playerId) sendError(ws, 'Unauthorized');
+    if (!game) sendError(ws, REQUEST_TYPE, 'Game not found');
+    else if (!playerId) sendError(ws, REQUEST_TYPE, 'Unauthorized');
   }
 
 }
